@@ -24,9 +24,9 @@ environments simply don't have the dataset, level of concurrency or sheer size
 of the real thing.
 
 In this talk we'll address the challenges of tuning your Django app through
-continuous automatic runtime inspection tools. We'll uncover the pages that
-consume disproportionate amounts of time and cycles to complete and the pages
-that get killed altogether.
+continuous automatic runtime inspection tools, including homegrown Dogslow.
+We'll uncover the pages that consume disproportionate amounts of time and
+cycles to complete and the pages that get killed altogether.
 
 We'll discuss several ways to help you identify and eliminate the hotspots,
 both passively through monitoring exclusively, as well as actively by
