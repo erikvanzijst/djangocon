@@ -41,7 +41,7 @@
         </section>
 
         <section>
-					<h2>Continuous Introspection</h2>
+          <h2>Continuous Introspection</h2>
           <p>&nbsp;</p>
           <p>Erik van Zijst</p>
           <p>@erikvanzijst</p>
@@ -54,15 +54,109 @@
 
 
         <section>
-					<h2>Heads Up</h2>
-					<p>
-						reveal.js is an easy to use, HTML based, presentation tool. You'll need a modern browser with 
-						support for CSS 3D transforms to see it in its full glory.
-					</p>
-					<p>
-						<i><small>- <a href="http://hakim.se">Hakim El Hattab</a> / <a href="http://twitter.com/hakimel">@hakimel</a></small></i>
-					</p>
-				</section>
+          <!--
+          Introduction: name and Bitbucket
+          Bitbucket s popular and grows quickly
+          hardware needs to scale, add servers constantly
+          drives interest in performance tuning (show load graph?)
+
+          -->
+
+          <!--
+          Discovered conq in top (top 4 procs, 100% cpu, 300MB RAM)
+          conq is ssh login shell, spawns children (git, hg)
+          must not use cpu
+          discovered: conq is python, imports django, uses orm
+          rewrite with plain sql, 60% load reduction across all frontends and
+            much faster ssh response times
+          show load graph
+
+          -->
+
+          <!--
+          Not all hotspots are bad; it's the ones doing redundant work
+          mpeg encoder will always have a hotspot in DCT transforms
+          in webapps, anything that adds to render time is bad
+
+          -->
+
+          <!--
+          In reality, many sources of slowness lurk in web apps:
+          - evil regexps
+          - exponential complexity algorithms
+          - slow SQL query
+          - lock contention
+          -- threads
+          -- table/row locks on slow transactions
+          -- file locks (bb repos)
+          - excessive disk IO (DAG traversals)
+          - excessive network IO (chatty NFS, too granular memcached keys)
+
+          -->
+
+          <!--
+          When pages are slow:
+          Consequences of slow pages:
+          - 503s: worker pools full
+          - 500s: if webserver SIGKILLs (plus stale state: lock files, txs)
+
+          -->
+
+          <!--
+          Normal way to find slowness is profiling, but:
+          expensive, impossible in production
+          dev envs usually lack data-set, clustering and concurrency
+
+          -->
+
+          <!--
+          Django-Geordi
+          replay prod request with profiling
+          produces pdf call graph
+          runs outside the pool without timeouts (celery)
+
+          Can do staging request live?
+
+          -->
+
+          <!--
+          Dogslow
+          automatic emails on slow requests
+          non-invasive, no performance penalty, safe on prod
+
+          Slow pages still get killed, but now we know about it
+          Used by Instagram
+
+          -->
+
+          <!--
+          Interruptingcow
+          Send non-lethal exception to process before webserver SIGKILL:
+          - prevent empty response (500 with crucial backtrace instead)
+          - ensure proper resource closing (explicit db rollback, release lock files)
+          - avoid worker process restart
+          - uses UNIX signals, interrupts regardless of GIL
+
+          -->
+
+          <!--
+          Timebox operations with Interruptingcow
+          no more regexp of death
+          code sample
+          Used by BB to linkify?
+
+          -->
+
+
+            <h2>Heads Up</h2>
+            <p>
+                reveal.js is an easy to use, HTML based, presentation tool. You'll need a modern browser with
+                support for CSS 3D transforms to see it in its full glory.
+            </p>
+            <p>
+                <i><small>- <a href="http://hakim.se">Hakim El Hattab</a> / <a href="http://twitter.com/hakimel">@hakimel</a></small></i>
+            </p>
+        </section>
 				
 				<!-- Example of nested vertical slides -->
 				<section>
