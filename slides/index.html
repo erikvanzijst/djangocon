@@ -1,14 +1,13 @@
-
-<!doctype html>  
+<!doctype html>
 <html lang="en">
 	
 	<head>
 		<meta charset="utf-8">
 		
-		<title>reveal.js</title>
+		<title>Djangocon EU 2012: Continuous Introspection</title>
 
-		<meta name="description" content="An easy to use CSS 3D slideshow tool for quickly creating good looking HTML presentations.">
-		<meta name="author" content="Hakim El Hattab">
+		<meta name="description" content="Djangocon EU 2012: Healthy WebApps Through Continuous Introspection.">
+		<meta name="author" content="Erik van Zijst">
 
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -44,8 +43,8 @@
           <h2>Continuous Introspection</h2>
           <p>&nbsp;</p>
           <p>Erik van Zijst</p>
-          <p>@erikvanzijst</p>
-          <p>bitbucket.org/evzijst</p>
+          <p><a href="https://twitter.com/erikvanzijst">@erikvanzijst</a> /
+            <a href="http://bitbucket.org/evzijst">bitbucket.org/evzijst</a></p>
 					<script>
 						// Delicously hacky. Look away.
 						if( navigator.userAgent.match( /(iPhone|iPad|iPod|Android)/i ) ) document.write( '<p style="color: rgba(0,0,0,0.3); text-shadow: none;">('+'Tap to navigate'+')</p>' );
@@ -53,15 +52,15 @@
 				</section>
 
 
-        <section>
           <!--
           Introduction: name and Bitbucket
-          Bitbucket s popular and grows quickly
+          Bitbucket is popular and grows quickly
           hardware needs to scale, add servers constantly
           drives interest in performance tuning (show load graph?)
 
           -->
 
+        <section>
           <!--
           Discovered conq in top (top 4 procs, 100% cpu, 300MB RAM)
           conq is ssh login shell, spawns children (git, hg)
@@ -72,6 +71,14 @@
           show load graph
 
           -->
+          <h2>Wasted Cycles on Bitbucket</h2>
+          <img src="conq.png">
+          <ul>
+            <li class="fragment"><em>60%</em> load decrease on all web servers!</li>
+            <li class="fragment">Much faster response times</li>
+          </ul>
+          <img class="fragment" src="load.png">
+        </section>
 
           <!--
           Not all hotspots are bad; it's the ones doing redundant work
@@ -80,6 +87,7 @@
 
           -->
 
+        <section>
           <!--
           In reality, many sources of slowness lurk in web apps:
           - evil regexps
@@ -93,6 +101,24 @@
           - excessive network IO (chatty NFS, too granular memcached keys)
 
           -->
+          <h2>Slowness in Web Apps</h2>
+          <p>&nbsp;</p>
+          <ul>
+            <li class="fragment">slow SQL queries</li>
+            <li class="fragment">algorithms with exponential complexity</li>
+            <li class="fragment">
+              <p>lock contention:</p>
+              <ol>
+                <li>between threads</li>
+                <li>database table/row locks</li>
+                <li>file locks (git / hg)</li>
+              </ol>
+            </li>
+            <li class="fragment">excessive disk IO (DAG traversals)</li>
+            <li class="fragment">excessive network IO</li>
+            <li class="fragment"><code>r'^(a+)+$'</code> <em>(evil regexps)</em></li>
+          </ul>
+        </section>
 
           <!--
           When pages are slow:
@@ -147,15 +173,15 @@
 
           -->
 
-
-            <h2>Heads Up</h2>
-            <p>
-                reveal.js is an easy to use, HTML based, presentation tool. You'll need a modern browser with
-                support for CSS 3D transforms to see it in its full glory.
-            </p>
-            <p>
-                <i><small>- <a href="http://hakim.se">Hakim El Hattab</a> / <a href="http://twitter.com/hakimel">@hakimel</a></small></i>
-            </p>
+        <section>
+          <h2>Heads Up</h2>
+          <p>
+              reveal.js is an easy to use, HTML based, presentation tool. You'll need a modern browser with
+              support for CSS 3D transforms to see it in its full glory.
+          </p>
+          <p>
+              <i><small>- <a href="http://hakim.se">Hakim El Hattab</a> / <a href="http://twitter.com/hakimel">@hakimel</a></small></i>
+          </p>
         </section>
 				
 				<!-- Example of nested vertical slides -->
