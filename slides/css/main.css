@@ -21,6 +21,11 @@
  * GLOBAL STYLES
  *********************************************/
 
+table
+td {
+    vertical-align: top;
+}
+
 html, body {
 	position: relative;
 	padding: 0;
@@ -57,7 +62,7 @@ html {
 #reveal h2, 
 #reveal h3, 
 #reveal h4 {
-	margin: 0 0 20px 0;
+	margin: 0 0 40px 0;
 	
 	color: #eee;
 	

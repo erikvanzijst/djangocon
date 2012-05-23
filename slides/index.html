@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 	
 	<head>
 		<meta charset="utf-8">
@@ -41,6 +41,11 @@
 
         <section>
           <h2>Continuous Introspection</h2>
+          (finding the slow bits)
+          <p>&nbsp;</p>
+          <p>&nbsp;</p>
+          <p>&nbsp;</p>
+          <p>&nbsp;</p>
           <p>&nbsp;</p>
           <p>Erik van Zijst</p>
           <p><a href="https://twitter.com/erikvanzijst">@erikvanzijst</a> /
@@ -73,9 +78,9 @@
           -->
           <h2>Wasted Cycles on Bitbucket</h2>
           <img src="conq.png">
-          <ul>
-            <li class="fragment"><em>60%</em> load decrease on all web servers!</li>
-            <li class="fragment">Much faster response times</li>
+          <ul class="fragment">
+            <li><em>60%</em> load decrease on all web servers!</li>
+            <li>Much faster response times</li>
           </ul>
           <img class="fragment" src="load.png">
         </section>
@@ -100,11 +105,13 @@
           - excessive disk IO (DAG traversals)
           - excessive network IO (chatty NFS, too granular memcached keys)
 
+          Slowness often context-dependent (won't see it on a dev instance), so
+          the talk focuses on tools that can be used on production.
+
           -->
           <h2>Slowness in Web Apps</h2>
-          <p>&nbsp;</p>
           <ul>
-            <li class="fragment">slow SQL queries</li>
+            <li class="fragment">slow SQL queries (or too many!)</li>
             <li class="fragment">algorithms with exponential complexity</li>
             <li class="fragment">
               <p>lock contention:</p>
@@ -114,12 +121,14 @@
                 <li>file locks (git / hg)</li>
               </ol>
             </li>
-            <li class="fragment">excessive disk IO (DAG traversals)</li>
-            <li class="fragment">excessive network IO</li>
+            <li class="fragment">excessive IO (disk/network)</li>
             <li class="fragment"><code>r'^(a+)+$'</code> <em>(evil regexps)</em></li>
           </ul>
+          <p>&nbsp;</p>
+          <p class="fragment">(<em>Slowness is often context-dependent</em>)</p>
         </section>
 
+        <section>
           <!--
           When pages are slow:
           Consequences of slow pages:
@@ -127,6 +136,18 @@
           - 500s: if webserver SIGKILLs (plus stale state: lock files, txs)
 
           -->
+          <h2>Consequences</h2>
+          <p>&nbsp;</p>
+          <ul>
+            <li><b>503</b> &mdash; worker pools full</li>
+            <li><b>500</b> &mdash; if requests time out (Gunicorn SIGKILL)</li>
+          </ul>
+          <p>&nbsp;</p>
+          <p>
+            The latter is best avoided as it destroys forensic evidence and
+            leaves stale state (e.g. lock files)
+          </p>
+        </section>
 
           <!--
           Normal way to find slowness is profiling, but:
@@ -135,25 +156,90 @@
 
           -->
 
-          <!--
-          Django-Geordi
-          replay prod request with profiling
-          produces pdf call graph
-          runs outside the pool without timeouts (celery)
+        <section>
+          <section>
+            <!--
+            Django-Geordi
+            replay prod request with profiling
+            produces pdf call graph
+            runs outside the worker pool without timeouts (celery)
 
-          Can do staging request live?
+            Can do staging request live?
 
-          -->
+            -->
+            <h2>Meet django-geordi</h2>
+            <p><small><a href="https://bitbucket.org/brodie/geordi">bitbucket.org/brodie/geordi</a></small></p>
 
-          <!--
-          Dogslow
-          automatic emails on slow requests
-          non-invasive, no performance penalty, safe on prod
+            <div style="position: absolute; top: 100px; right: 0px;">
+            <img src="geordilaforge.jpg" height="50%"/>
+            </div>
 
-          Slow pages still get killed, but now we know about it
-          Used by Instagram
+            <p>&nbsp;</p>
+            <ul>
+              <li>add "<code>?__geordi__</code>" to any URL</li>
+              <li>replay prod request with profiling</li>
+              <li>produces pdf call graph</li>
+              <li>runs outside the worker pool without timeouts (celeryd)</li>
+            </ul>
+          </section>
 
-          -->
+          <section>
+            <p><img src="geordi1.png"/></p>
+          </section>
+        </section>
+
+        <section>
+
+          <section>
+            <!--
+            Dogslow
+            automatic emails on slow requests
+            non-invasive, no performance penalty, safe on prod
+
+            Slow pages still get killed, but now we know about it
+            Used by Instagram
+
+            -->
+            <h2>Dogslow</h2>
+            <p></p><small><a href="https://bitbucket.org/evzijst/dogslow">bitbucket.org/evzijst/dogslow</a></small></p>
+            <ul>
+              <li>Django middleware</li>
+              <li>emails tracebacks of slow requests</li>
+              <li>no performance penalty, safe on prod</li>
+            </ul>
+          </section>
+
+          <section>
+            <p>Dogslow catching a slow hg blame page:</p>
+            <p>&nbsp;</p>
+            <pre><code>
+            GET /annotate/521ae2309f0b/adblocklist.txt
+            Thread ID:  140143111386880
+            Process ID: 19530
+            Started:    22-05-2012 21:14:05 UTC
+
+              File "bitbucket/apps/repo2/views.py", line 792, in annotate
+                blame = file_.blame()
+              File "site-packages/orochi/base.py", line 1208, in wrapper
+                return func(self, *args, **kwargs)
+              File "site-packages/orochi/hg.py", line 606, in blame
+                self._fctx.annotate(linenumber=False)]
+              File "site-packages/mercurial/context.py", line 509, in annotate
+                curr = decorate(f.data(), f)
+              File "site-packages/mercurial/context.py", line 360, in data
+                return self._filelog.read(self._filenode)
+              File "site-packages/mercurial/filelog.py", line 40, in read
+                return t
+              File "site-packages/mercurial/revlog.py", line 904, in revision
+                text = self._checkhash(text, node, rev)
+              File "site-packages/mercurial/revlog.py", line 911, in _checkhash
+                if node != hash(text, p1, p2):
+              File "site-packages/mercurial/revlog.py", line 75, in hash
+                s.update(text)
+            </code></pre>
+
+          </section>
+        </section>
 
           <!--
           Interruptingcow
