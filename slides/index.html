@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns="http://www.w3.org/1999/html"
+      xmlns="http://www.w3.org/1999/html">
 	
 	<head>
 		<meta charset="utf-8">
@@ -207,12 +208,27 @@
               <li>emails tracebacks of slow requests</li>
               <li>no performance penalty, safe on prod</li>
             </ul>
+            <p>&nbsp;</p>
+            <small>
+              <div class="fragment">
+                <code>&lt;self-promotion&gt;</code>
+                  <div><em>used by Instagram and Bitbucket</em></div>
+                <code>&lt;/self-promotion&gt;</code>
+              </div>
+
+            </small>
           </section>
 
           <section>
-            <p>Dogslow catching a slow hg blame page:</p>
+            <p>Email from Dogslow catching a slow hg blame page:</p>
             <p>&nbsp;</p>
             <pre><code>
+            Subject: Slow Request Watchdog: GET /annotate/521ae2309f0b/adblocklist.txt
+            From: notifications-noreply@atlassian.com
+            To: bitbucket-errors@atlassian.com
+            Date: Tue, 22 May 2012 21:14:30 -0000
+
+
             GET /annotate/521ae2309f0b/adblocklist.txt
             Thread ID:  140143111386880
             Process ID: 19530
@@ -241,23 +257,104 @@
           </section>
         </section>
 
+        <section>
+          <section>
+            <!--
+            Interruptingcow
+            Send non-lethal exception to process before webserver SIGKILL:
+            - prevent empty response (500 with crucial backtrace instead)
+            - ensure proper resource closing (explicit db rollback, release lock files)
+            - avoid worker process restart
+            - uses UNIX signals, interrupts regardless of GIL
+
+            -->
+            <h2>Interruptingcow</h2>
+            <p></p><small><a href="https://bitbucket.org/evzijst/interruptingcow">bitbucket.org/evzijst/interruptingcow</a></small></p>
+            <ul>
+              <li>raises a <code>RuntimeError</code> in the worker</li>
+              <li>fail in a controlled manner</li>
+              <li>ensure proper cleanup (db, lock files)</li>
+              <li>uses UNIX signals (SIGALRM, GIL-proof)</li>
+            </ul>
+          </section>
+
+          <section>
+            <!--
+            Timebox operations with Interruptingcow
+            no more regexp of death
+            code sample
+            Used by BB to linkify?
+
+            -->
+            <h2>Timebox expensive operations</h2>
+            <pre><code>
+              from interruptingcow import timeout
+
+              try:
+                  with timeout(20, RuntimeError):
+                      while True:
+                          # expensive loop
+                          pass
+              except RuntimeError:
+                  print 'Interrupted'
+            </code></pre>
+            <!-- useful for:
+              - linkification
+              - code highlighting
+            -->
+
+          </section>
+
+          <section>
+            <h2>Nested timeouts</h2>
+            <pre><code>
+              from interruptingcow import timeout
+
+              class Outer(RuntimeError):
+                  pass
+
+              class Inner(RuntimeError):
+                  pass
+
+              try:
+                  with timeout(20, Outer):
+                      try:
+                          with timeout(1, Inner):
+                              # some expensive operation
+                              try_the_expensive_thing()
+                      except Inner:
+                          do_the_cheap_thing_instead()
+
+              except Outer:
+                  print 'Program as a whole failed to return in 20 secs'
+            </code></pre>
+          </section>
+        </section>
+
+        <section>
           <!--
-          Interruptingcow
-          Send non-lethal exception to process before webserver SIGKILL:
-          - prevent empty response (500 with crucial backtrace instead)
-          - ensure proper resource closing (explicit db rollback, release lock files)
-          - avoid worker process restart
-          - uses UNIX signals, interrupts regardless of GIL
+          Summary
 
+          - Geordi
+          -- Profile production
+          - Dogslow
+          -- tracebacks of slow requests
+          - Interruptingcow
+          -- timebox expensive code and fail gracefully
           -->
-
-          <!--
-          Timebox operations with Interruptingcow
-          no more regexp of death
-          code sample
-          Used by BB to linkify?
-
-          -->
+          <h2>Summary</h2>
+          <ul>
+            <li>Geordi &mdash; profile production environments
+              <p><small><a href="https://bitbucket.org/brodie/geordi">bitbucket.org/brodie/geordi</a></small></p>
+            </li>
+            <li>Dogslow &mdash; tracebacks of slow requests
+              <p></p><small><a href="https://bitbucket.org/evzijst/dogslow">bitbucket.org/evzijst/dogslow</a></small></p>
+            </li>
+            <li>Interruptedcow &mdash; prevent slowness and fail gracefully
+              <p></p><small><a href="https://bitbucket.org/evzijst/interruptingcow">bitbucket.org/evzijst/interruptingcow</a></small></p>
+            </li>
+          </ul>
+        </section>
 
         <section>
           <h2>Heads Up</h2>
