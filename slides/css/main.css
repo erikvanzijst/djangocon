@@ -156,6 +156,14 @@ html {
 	list-style: disc;
 }
 
+#reveal ol ol,
+#reveal ol ul,
+#reveal ul ol,
+#reveal ul ul {
+  margin-bottom: 10px;
+  padding-left: 36px;
+}
+
 #reveal p {
 	margin-bottom: 10px;
 }
