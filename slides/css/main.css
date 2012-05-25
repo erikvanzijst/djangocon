@@ -945,6 +945,7 @@ html {
 
 #geordi {
   float: left;
+  margin-top: 10px !important;
   width: 25%;
 }
 #geordi + ul {
