@@ -953,3 +953,12 @@ html {
   margin-top: 30px;
   margin-left: 35%;
 }
+
+#summary p + p {
+  margin-bottom: 24px;
+  font-size: 60%;
+  line-height: 1;
+}
+#summary small em {
+  margin-left: 10px;
+}
