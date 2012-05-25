@@ -297,7 +297,7 @@
               from interruptingcow import timeout
 
               try:
-                  with timeout(20, RuntimeError):
+                  with timeout(20.0, RuntimeError):
                       while True:
                           # expensive loop
                           pass
@@ -323,9 +323,9 @@
                   pass
 
               try:
-                  with timeout(20, Outer):
+                  with timeout(20.0, Outer):
                       try:
-                          with timeout(1, Inner):
+                          with timeout(1.0, Inner):
                               # some expensive operation
                               try_the_expensive_thing()
                       except Inner:
