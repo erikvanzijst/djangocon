@@ -43,10 +43,12 @@
           <p>Erik van Zijst</p>
           <p><a href="https://twitter.com/erikvanzijst">@erikvanzijst</a> /
             <a href="http://bitbucket.org/evzijst">bitbucket.org/evzijst</a></p>
-					<script>
-						// Delicously hacky. Look away.
-						if( navigator.userAgent.match( /(iPhone|iPad|iPod|Android)/i ) ) document.write( '<p style="color: rgba(0,0,0,0.3); text-shadow: none;">('+'Tap to navigate'+')</p>' );
-					</script>
+          <script>
+            // Delicously hacky. Look away.
+            if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+              document.write('<p style="color:rgba(0,0,0,0.3);text-shadow:none">(Tap to navigate)</p>');
+            }
+          </script>
 				</section>
 
 
