@@ -178,32 +178,32 @@
           <section>
             <p>Dogslow emailing a slow DAG traversal:</p>
             <pre><code>
-              Subject: Slow Request Watchdog: GET http://bitbucket.org/alpine/voncount
-              From: notifications-noreply@atlassian.com
-              To: notifications-noreply@atlassian.com
-              Date: Tue, 29 May 2012 18:36:48 -0000
+Subject: Slow Request Watchdog: GET http://bitbucket.org/alpine/voncount
+From: notifications-noreply@atlassian.com
+To: notifications-noreply@atlassian.com
+Date: Tue, 29 May 2012 18:36:48 -0000
 
-              GET http://bitbucket.org/alpine/voncount
-              Thread ID:  140026041280256
-              Process ID: 22610
-              Started:    29-05-2012 18:36:23 UTC
+GET http://bitbucket.org/alpine/voncount
+Thread ID:  140026041280256
+Process ID: 22610
+Started:    29-05-2012 18:36:23 UTC
 
-              File "bitbucket/apps/repo2/views.py", line 119, in repository
-                with repo.history.walk() as walker:
-              File "python2.7/contextlib.py", line 17, in __enter__
-                return self.gen.next()
-              File "site-packages/orochi/git.py", line 888, in walk
-                with self._revlist() as f:
-              File "python2.7/contextlib.py", line 17, in __enter__
-                return self.gen.next()
-              File "site-packages/orochi/git.py", line 822, in _revlist
-                stdout, stderr = p.communicate(input=input)
-              File "python2.7/subprocess.py", line 754, in communicate
-                return self._communicate(input)
-              File "python2.7/subprocess.py", line 1312, in _communicate
-                stdout, stderr = self._communicate_with_poll(input)
-              File "python2.7/subprocess.py", line 1366, in _communicate_with_poll
-                ready = poller.poll()
+File "bitbucket/apps/repo2/views.py", line 119, in repository
+  with repo.history.walk() as walker:
+File "python2.7/contextlib.py", line 17, in __enter__
+  return self.gen.next()
+File "site-packages/orochi/git.py", line 888, in walk
+  with self._revlist() as f:
+File "python2.7/contextlib.py", line 17, in __enter__
+  return self.gen.next()
+File "site-packages/orochi/git.py", line 822, in _revlist
+  stdout, stderr = p.communicate(input=input)
+File "python2.7/subprocess.py", line 754, in communicate
+  return self._communicate(input)
+File "python2.7/subprocess.py", line 1312, in _communicate
+  stdout, stderr = self._communicate_with_poll(input)
+File "python2.7/subprocess.py", line 1366, in _communicate_with_poll
+  ready = poller.poll()
             </code></pre>
 
             <p class="fragment">Git repo had 6707 loose object files.
