@@ -297,56 +297,33 @@ except RuntimeError:
           </section>
 
           <section>
-            <!--
-            Timebox operations with Interruptingcow
-            no more regexp of death
-            code sample
-            Used by BB to linkify?
-
-            -->
-            <h2>Timebox expensive operations</h2>
-            <pre><code>
-              from interruptingcow import timeout
-
-              try:
-                  with timeout(20.0, RuntimeError):
-                      while True:
-                          # expensive loop
-                          pass
-              except RuntimeError:
-                  print 'Interrupted'
-            </code></pre>
-            <!-- useful for:
-              - linkification
-              - code highlighting
-            -->
-
-          </section>
-
-          <section>
             <h2>Nested timeouts</h2>
             <pre><code>
-              from interruptingcow import timeout
+from interruptingcow import timeout
 
-              class Outer(RuntimeError):
-                  pass
+class Outer(RuntimeError):
+    pass
 
-              class Inner(RuntimeError):
-                  pass
+class Inner(RuntimeError):
+    pass
 
-              try:
-                  with timeout(20.0, Outer):
-                      try:
-                          with timeout(1.0, Inner):
-                              # some expensive operation
-                              try_the_expensive_thing()
-                      except Inner:
-                          do_the_cheap_thing_instead()
+try:
+    with timeout(20.0, Outer):
+        try:
+            with timeout(1.0, Inner):
+                # some expensive operation
+                try_the_expensive_thing()
+        except Inner:
+            do_the_cheap_thing_instead()
 
-              except Outer:
-                  print 'Program as a whole failed to return in 20 secs'
+except Outer:
+    print 'Program as a whole failed to return in 20 secs'
             </code></pre>
           </section>
+          <!-- useful for:
+            - linkification
+            - code highlighting
+          -->
         </section>
 
         <section>
