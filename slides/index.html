@@ -268,6 +268,23 @@
             <img id="cow" src="cow.png" />
             <ul>
               <li>
+                <p>timebox chunks of code:</p>
+            <pre><code>
+import re
+from interruptingcow import timeout
+
+try:
+    with timeout(20.0, RuntimeError):
+        # evil regex:
+        re.match(r'(a+)+$',
+            'aaaaaaaaaaaaaaaaaaaaaaaa!')
+except RuntimeError:
+    print 'Interrupted'
+            </code></pre>
+              </li>
+            </ul>
+            <ul>
+              <li>
                 <p>raises a <code>RuntimeError</code> in the worker</p>
               </li>
               <li>
@@ -275,9 +292,6 @@
               </li>
               <li>
                 <p>ensure proper cleanup (db, lock files)</p>
-              </li>
-              <li>
-                <p>uses UNIX signals (SIGALRM, GIL-proof)</p>
               </li>
             </ul>
           </section>
