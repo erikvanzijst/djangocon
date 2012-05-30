@@ -58,31 +58,43 @@
           -->
 
         <section>
-          <!--
-          Discovered conq in top (top 4 procs, 100% cpu, 300MB RAM)
-          conq is ssh login shell, spawns children (git, hg)
-          must not use cpu
-          discovered: conq is python, imports django, uses orm
-          rewrite with plain sql, 60% load reduction across all frontends and
-            much faster ssh response times
-          show load graph
 
-          -->
-          <h2>Wasted Cycles on Bitbucket</h2>
-          <img src="conq.png">
-          <ul class="fragment">
-            <li><em>60%</em> load decrease on all web servers!</li>
-            <li>Much faster response times</li>
-          </ul>
-          <img class="fragment" src="load.png">
+          <section>
+            <!--
+            Discovered conq in top (top 4 procs, 100% cpu, 300MB RAM)
+            conq is ssh login shell, spawns children (git, hg)
+            must not use cpu
+            discovered: conq is python, imports django, uses orm
+            rewrite with plain sql, 60% load reduction across all frontends and
+              much faster ssh response times
+            show load graph
+
+            -->
+            <h2>Wasted Cycles on Bitbucket</h2>
+            <img src="conq.png" style="margin-bottom: 50px;">
+            <ul>
+              <li class="fragment"><p><code>conq</code> is our custom SSH shell</p></li>
+              <li class="fragment"><p><code>conq</code> imports Django ORM and Bitbucket code</p></li>
+              <li class="fragment"><p>takes ~1.41 seconds to start (spawns ~50/second)</p></li>
+            </ul>
+            <p>&nbsp;</p>
+            <p class="fragment">Solution: no dependencies/imports and use plain SQL</p>
+          </section>
+
+          <section>
+            <img src="load.png" style="margin-top: 100px; margin-bottom: 50px;">
+            <ul>
+              <li><p>16 times faster to start up (0.09s vs 1.41s)</p></li>
+              <li><p><em>60%</em> load decrease on all web servers!</p></li>
+            </ul>
+          </section>
         </section>
+        <!--
+        Not all hotspots are bad; it's the ones doing redundant work
+        mpeg encoder will always have a hotspot in DCT transforms
+        in webapps, anything that adds to render time is bad
 
-          <!--
-          Not all hotspots are bad; it's the ones doing redundant work
-          mpeg encoder will always have a hotspot in DCT transforms
-          in webapps, anything that adds to render time is bad
-
-          -->
+        -->
 
         <section>
           <!--
